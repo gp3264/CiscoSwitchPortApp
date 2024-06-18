@@ -3,7 +3,7 @@
 
 # Variables
 $repoDir = "C:\CiscoSwitchPortApp"
-$repoUrl = "https://github.com/your-repo/CiscoSwitchPortApp.git"
+$repoUrl = "https://github.com/gp3264/CiscoSwitchPortApp.git"
 
 # Navigate to the repository directory
 if (-not (Test-Path $repoDir)) {
