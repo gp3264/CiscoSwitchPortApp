@@ -20,8 +20,11 @@ git pull
 & .\venv\Scripts\python.exe -m pip install --upgrade pip
 & .\venv\Scripts\pip.exe install -r requirements.txt
 
-# Run the Flask application
-$env:FLASK_APP = "app"
-flask ..\..\run.py
+# Set up the Python virtual environment
+& .\venv\Scripts\Activate.ps1
 
-Read-Host -Prompt "Press Enter to continue..."
+
+# Run the Flask application
+$env:FLASK_APP = "run:app_instance"
+$env:FLASK_ENV = "development"
+.\venv\Scripts\flask.exe run
