@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Cisco Switch Port App</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <p>Welcome, {{ session['username'] }}!</p>
+    <form action="/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+    <h2>Add Device</h2>
+    <form action="/add_device" method="post">
+        <label for="name">Device Name:</label>
+        <input type="text" id="name" name="name" required>
+        <br>
+        <label for="ip_address">IP Address:</label>
+        <input type="text" id="ip_address" name="ip_address" required>
+        <br>
+        <button type="submit">Add Device</button>
+    </form>
+    <h2>Run Command</h2>
+    <form action="/run_command" method="post">
+        <label for="device_id">Device ID:</label>
+        <input type="text" id="device_id" name="device_id" required>
+        <br>
+        <label for="command">Command:</label>
+        <input type="text" id="command" name="command" required>
+        <br>
+        <button type="submit">Run Command</button>
+    </form>
+</body>
+</html>
