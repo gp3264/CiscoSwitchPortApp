@@ -55,11 +55,12 @@ git clone $repoUrl $installDir
 cd $installDir
 python -m venv venv
 & .\venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+& .\venv\Scripts\python.exe -m pip install --upgrade pip
+& .\venv\Scripts\pip.exe install -r requirements.txt
 
 # Run the Flask application
 $env:FLASK_APP = "app"
 flask run
 
 
-Read-Host -Prompt "Press Enter to continue..."
+#Read-Host -Prompt "Press Enter to continue..."
