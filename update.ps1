@@ -22,6 +22,6 @@ pip install -r requirements.txt
 
 # Run the Flask application
 $env:FLASK_APP = "app"
-python run
+python run.py
 
 Read-Host -Prompt "Press Enter to continue..."
