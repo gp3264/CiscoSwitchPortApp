@@ -60,3 +60,6 @@ pip install -r requirements.txt
 # Run the Flask application
 $env:FLASK_APP = "app"
 flask run
+
+
+Read-Host -Prompt "Press Enter to continue..."

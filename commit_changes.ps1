@@ -17,4 +17,4 @@ git commit -m "Update application with latest changes"
 git push
 
 
-sleep 15
+Read-Host -Prompt "Press Enter to continue..."

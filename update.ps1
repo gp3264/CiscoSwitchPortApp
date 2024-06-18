@@ -23,4 +23,4 @@ pip install -r requirements.txt
 $env:FLASK_APP = "app"
 flask run
 
-sleep 15
+Read-Host -Prompt "Press Enter to continue..."
