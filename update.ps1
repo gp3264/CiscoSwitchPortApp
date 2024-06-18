@@ -13,7 +13,7 @@ if (-not (Test-Path $repoDir)) {
 cd $repoDir
 
 # Pull the latest updates from GitHub
-git pull
+#git pull
 
 # Set up the Python virtual environment and install updated dependencies
 & .\venv\Scripts\Activate.ps1
@@ -28,4 +28,5 @@ git pull
 $env:FLASK_APP = "run:app_instance"
 $env:FLASK_ENV = "development"
 #.\venv\Scripts\flask.exe run
-.\venv\Scripts\python.exe run.py
+#.\venv\Scripts\python.exe run.py
+sleep 8
