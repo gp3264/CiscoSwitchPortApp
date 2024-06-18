@@ -19,6 +19,5 @@ cd $repoDir
 
 # Run the Flask application
 $env:FLASK_APP = "app"
-flask run.py
+.\venv\Scripts\flask.exe run
 
-Read-Host -Prompt "Press Enter to continue..."
