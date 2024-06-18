@@ -27,4 +27,5 @@ git pull
 # Run the Flask application
 $env:FLASK_APP = "run:app_instance"
 $env:FLASK_ENV = "development"
-.\venv\Scripts\flask.exe run
+#.\venv\Scripts\flask.exe run
+.\venv\Scripts\python.exe run.py

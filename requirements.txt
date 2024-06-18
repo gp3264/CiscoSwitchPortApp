@@ -7,3 +7,5 @@ ldap3
 netmiko
 #netmiko==3.4.0
 #pyodbc==4.0.30
+#Crypto
+pycryptodome

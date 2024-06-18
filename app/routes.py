@@ -10,12 +10,25 @@ main = Blueprint('main', __name__)
 class AuthService:
     @staticmethod
     def authenticate_user(username, password):
+        
+        """
+        # Hostname                         IPv4Address
+        # --------                         -----------
+        # MDTAICCDC03.mdta.ad.mdot.mdstate 10.93.121.41
+        # MDTAICCDC01.mdta.ad.mdot.mdstate 10.93.121.40
+        # MDTAJFKDC01.mdta.ad.mdot.mdstate 10.93.119.40
+        # MDTAJFKDC02.mdta.ad.mdot.mdstate 10.93.119.41
+        # mdtaazdc01.mdta.ad.mdot.mdstate  10.91.252.9
+        """
+        current_app.config['AD_SERVER'] = '10.93.121.40'
         ad_server = current_app.config['AD_SERVER']
+        current_app.config['AD_DOMAIN'] = 'mdta'
         ad_domain = current_app.config['AD_DOMAIN']
-        user_dn = f'{ad_domain}\{username}'
+        ad_domain = f"{ad_domain}"
+        user_dn = f'{ad_domain}\\{username}'
 
         server = Server(ad_server, get_info=ALL)
-        conn = Connection(server, user=user_dn, password=password, authentication=NTLM)
+        conn = Connection(server, user=user_dn, password=password, authentication=NTLM, source_port=389)
         if conn.bind():
             conn.unbind()
             return True
