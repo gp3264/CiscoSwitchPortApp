@@ -1,4 +1,4 @@
-
+import os
 from .database import Database
 
 db = Database.db
@@ -27,6 +27,7 @@ class Switchport(db.Model):
     device = db.relationship('Device', backref=db.backref('switchports', lazy=True))
 
 class Config:
+    BASE_DIR = "./"
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
