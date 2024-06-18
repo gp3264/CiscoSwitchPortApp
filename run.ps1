@@ -20,4 +20,6 @@ cd $repoDir
 # Run the Flask application
 $env:FLASK_APP = "run:app_instance"
 $env:FLASK_ENV = "development"
-.\venv\Scripts\flask.exe run
+#.\venv\Scripts\flask.exe run --debug
+.\venv\Scripts\python.exe run.py
+sleep 15
