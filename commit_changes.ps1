@@ -14,7 +14,7 @@ cd $repoDir
 # Add, commit, and push changes
 git add .
 git commit -m "Update application with latest changes"
-git push
+git push --force
 
 
 Read-Host -Prompt "Press Enter to continue..."
