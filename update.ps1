@@ -22,3 +22,5 @@ pip install -r requirements.txt
 # Run the Flask application
 $env:FLASK_APP = "app"
 flask run
+
+sleep 15
