@@ -31,8 +31,15 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'a_very_secret_key'
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BASE_DIR, 'app.db')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    AD_SERVER = 'ldap://your_ad_server'
-    AD_DOMAIN = 'your_domain'
+    AD_SERVER = 'ldap://10.93.121.40'
+        # Hostname                         IPv4Address
+        # --------                         -----------
+        # MDTAICCDC03.mdta.ad.mdot.mdstate 10.93.121.41
+        # MDTAICCDC01.mdta.ad.mdot.mdstate 10.93.121.40
+        # MDTAJFKDC01.mdta.ad.mdot.mdstate 10.93.119.40
+        # MDTAJFKDC02.mdta.ad.mdot.mdstate 10.93.119.41
+        # mdtaazdc01.mdta.ad.mdot.mdstate  10.91.252.9
+    AD_DOMAIN = 'mdta'
     LANSWEEPER_SERVER = r'(localdb)\.\LSInstance'
     LANSWEEPER_DATABASE = 'lansweeperdb'
     LANSWEEPER_USERNAME = os.environ.get('LANSWEEPER_USERNAME') or 'your_username'
