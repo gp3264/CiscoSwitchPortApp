@@ -17,6 +17,7 @@ git pull
 
 # Set up the Python virtual environment and install updated dependencies
 & .\venv\Scripts\Activate.ps1
+& .\venv\Scripts\python.exe -m pip install --upgrade pip
 pip install -r requirements.txt
 
 # Run the Flask application
