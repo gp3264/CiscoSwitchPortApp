@@ -1,6 +1,5 @@
-
 Flask==2.0.1
 Flask-SQLAlchemy==2.5.1
 ldap3==2.9.1
 netmiko==3.4.0
-pyodbc==4.0.30
+#pyodbc==4.0.30
