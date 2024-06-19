@@ -1,6 +1,7 @@
 
 from flask import Blueprint, jsonify, request, render_template, redirect, url_for, session, current_app
-from ldap3 import Server, Connection, ALL, NTLM
+from pyad import aduser, pyad, adquery
+from ldap3 import Server, Connection, ALL
 from netmiko import ConnectHandler
 from .models import Database, Device, Config, MdtaRegion
 from .lansweeper_db import LansweeperLocalDB
@@ -28,10 +29,13 @@ class AuthService:
         user_dn = f'{ad_domain}\\{username}'
 
         server = Server(ad_server, get_info=ALL)
-        conn = Connection(server, user=user_dn, password=password, authentication=NTLM, source_port=389)
-        if conn.bind():
-            conn.unbind()
-            return True
+        try:
+            conn = Connection(server, user=user_dn, password=password)
+            if conn.bind():
+                conn.unbind()
+                return True
+        except Exception as e:
+            print(f"Authentication failed: {e}")
         return False
 
 def get_lansweeper_db():
