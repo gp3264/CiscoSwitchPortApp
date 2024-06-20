@@ -18,6 +18,7 @@ cd $repoDir
 # Set up the Python virtual environment and install updated dependencies
 & .\venv\Scripts\Activate.ps1
 & .\venv\Scripts\python.exe -m pip install --upgrade pip
+get-content requirements.txt
 & .\venv\Scripts\pip.exe install -r requirements.txt
 
 # Set up the Python virtual environment
