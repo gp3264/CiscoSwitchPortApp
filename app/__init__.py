@@ -1,3 +1,5 @@
+from app.cli_commands import CLICommands
+from app.cli_connection import CLIConnection
 
 from flask import Flask
 from .config import Config
