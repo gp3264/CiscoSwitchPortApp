@@ -158,6 +158,20 @@ class CLICommands:
             raise RuntimeError(f"Failed to run 'show interface {interface}'") from e
 
     @staticmethod
+    def show_interface_status(connection: CLIConnection) -> str:
+        """
+        Run 'show interface status' command and return the output.
+
+        :param connection: CLIConnection instance
+        :return: Output of the command
+        :raises RuntimeError: If the command execution fails
+        """
+        try:
+            return connection.run_command('show interface status')
+        except Exception as e:
+            raise RuntimeError("Failed to run 'show interface status'") from e
+
+    @staticmethod
     def shutdown_interface(connection: CLIConnection, interface: str) -> str:
         """
         Administratively shutdown the specified interface.
@@ -271,6 +285,9 @@ if __name__ == "__main__":
         interface = 'GigabitEthernet0/1'
         print(f"\nShow Interface {interface}:")
         print(CLICommands.show_interface(connection, interface))
+
+        print(f"\nShow Interface Status:")
+        print(CLICommands.show_interface_status(connection))
 
         print(f"\nEntering config mode to shutdown Interface {interface}:")
         CLICommands.enter_config_mode(connection)

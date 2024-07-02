@@ -9,3 +9,5 @@ netmiko
 #pyodbc==4.0.30
 pyad
 pywin32
+TextFSM
+ntc-templates
