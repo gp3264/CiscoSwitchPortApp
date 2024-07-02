@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request, render_template, redirect, url_fo
 from pyad import aduser, pyad, adquery
 from ldap3 import Server, Connection, ALL
 from netmiko import ConnectHandler
-from .models import Database, Device, Config, MdtaRegion
+from .models import Database, Device, MdtaRegion, Config
 from .lansweeper_db import LansweeperLocalDB
 
 main = Blueprint('main', __name__)

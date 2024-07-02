@@ -1,5 +1,6 @@
 import os
 from .database import Database
+from email.headerregistry import UniqueAddressHeader
 
 db = Database.db
 
@@ -51,3 +52,10 @@ class VersionInfo(db.Model):
     processor_board_id = db.Column(db.String(64))
 
     device = db.relationship('Device', backref=db.backref('version_info', lazy=True))
+
+
+class Config(db.Model):
+    __tablename__ = 'config'
+    key = db.Column(db.String(64), primary_key=True, unique=True)
+    value = db.Column(db.String(64))
+    

@@ -1,11 +1,12 @@
 from netmiko import ConnectHandler
 import logging
 from typing import Any, Optional, Dict
+from netmiko.base_connection import BaseConnection
 
 DEVICE_TYPE = 'cisco_ios'
 
-class CLIConnection(ConnectHandler):
-    def __init__(self, device_type: str, host: str, username: str, password: str, secret: Optional[str] = '', **kwargs: Any) -> None:
+class CLIConnection:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         """
         Initializes the CLIConnection instance.
 
@@ -15,21 +16,23 @@ class CLIConnection(ConnectHandler):
         :param password: Password for SSH login
         :param secret: Enable secret for privileged EXEC mode (optional)
         :param kwargs: Additional keyword arguments for ConnectHandler
-        """
-        super().__init__(
-            device_type=device_type,
-            host=host,
-            username=username,
-            password=password,
-            secret=secret,
-            **kwargs
-        )
+        #"""
+        #device: Dict[str, Any] = [*args, **kwargs]
+        #'device_type': 'cisco_ios',
+        #'host': '192.168.1.1',
+        #'username': 'admin',
+        #'password': 'password',
+        #'secret': 'enable_password',
+        #}
+        
+        self.connection:BaseConnection = ConnectHandler(*args, **kwargs)
+        self.host = self.connection.host
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         handler = logging.StreamHandler()
         handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         self.logger.addHandler(handler)
-        self.logger.info(f"Initialized CLIConnection for {host}")
+        self.logger.info(f"Initialized CLIConnection for {self.host}")
 
     def run_command(self, command: str) -> str:
         """
@@ -41,7 +44,7 @@ class CLIConnection(ConnectHandler):
         """
         self.logger.info(f"Running command: {command}")
         try:
-            output = self.send_command(command)
+            output = self.connection.send_command(command)
             self.logger.info(f"Command output: {output}")
             return output
         except Exception as e:
@@ -56,7 +59,7 @@ class CLIConnection(ConnectHandler):
         """
         self.logger.info("Entering enable mode")
         try:
-            self.enable()
+            self.connection.enable()
             self.logger.info("Entered enable mode")
         except Exception as e:
             self.logger.error(f"Failed to enter enable mode: {e}")
@@ -70,7 +73,7 @@ class CLIConnection(ConnectHandler):
         """
         self.logger.info(f"Disconnecting from {self.host}")
         try:
-            super().disconnect()
+            self.connection.disconnect()
             self.logger.info("Disconnected successfully")
         except Exception as e:
             self.logger.error(f"Failed to disconnect: {e}")
