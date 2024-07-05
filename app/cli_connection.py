@@ -30,8 +30,12 @@ class CLIConnection:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         handler = logging.StreamHandler()
-        handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        fh = logging.FileHandler(r'c:\CiscoSwitchPortApp\cli_connection.log')
+        fmt = '%(asctime)s - %(levelname)s - %(message)s'
+        fh.setFormatter(logging.Formatter(fmt))
+        handler.setFormatter(logging.Formatter(fmt))
         self.logger.addHandler(handler)
+        self.logger.addHandler(fh)
         self.logger.info(f"Initialized CLIConnection for {self.host}")
 
     def run_command(self, command: str) -> str:

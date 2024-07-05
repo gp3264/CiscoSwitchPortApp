@@ -325,8 +325,8 @@ if __name__ == "__main__":
 #        print(f"\nShow Interface {interface}:")
 #        print(CLICommandsTemplates.show_interface(connection, interface))
 
-        print(f"\nShow Interface Status:")
-        pprint(CLICommandsTemplates.show_interface_status(connection))
+        #print(f"\nShow Interface Status:")
+        #pprint(CLICommandsTemplates.show_interface_status(connection))
 
         # print(f"\nEntering config mode to shutdown Interface {interface}:")
         # CLICommandsTemplates.enter_config_mode(connection)

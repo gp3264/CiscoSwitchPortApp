@@ -11,3 +11,4 @@ pyad
 pywin32
 TextFSM
 ntc-templates
+python-nmap
