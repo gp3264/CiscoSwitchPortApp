@@ -15,6 +15,7 @@ class MacAddressSupport:
         self.mac_database_file = mac_database_file
         self.url = url
         self.mac_to_vendor = self.load_mac_to_vendor()
+        self.short_name_to_full_name = self.build_short_name_to_full_name_mapping()
 
     def load_mac_to_vendor(self) -> Dict[str, str]:
         """
@@ -68,6 +69,7 @@ class MacAddressSupport:
         :raises ValueError: If the data cannot be parsed.
         """
         mac_to_vendor = {}
+        self.short_name_to_full_name = {}
         try:
             for line in data.splitlines():
                 if line.startswith('#') or not line.strip():
@@ -75,14 +77,24 @@ class MacAddressSupport:
                 parts = re.split(r'\s+', line)
                 if len(parts) >= 3:
                     mac_prefix = parts[0].replace(':', '').lower()
-                    vendor = parts[2]
-                    mac_to_vendor[mac_prefix] = vendor
+                    short_name = parts[1]
+                    full_name = parts[2]
+                    mac_to_vendor[mac_prefix] = short_name
+                    self.short_name_to_full_name[short_name] = full_name
                 else:
                     print(f"Skipping invalid line: {line}")
             print(f"Parsed {len(mac_to_vendor)} entries from the MAC database")
             return mac_to_vendor
         except Exception as e:
             raise ValueError(f"Failed to parse manuf file: {e}")
+
+    def build_short_name_to_full_name_mapping(self) -> Dict[str, str]:
+        """
+        Build a mapping of short vendor names to full vendor names.
+
+        :return: A dictionary with short vendor names as keys and full vendor names as values.
+        """
+        return self.short_name_to_full_name
 
     def get_vendor(self, mac_address: str) -> Optional[str]:
         """
@@ -97,6 +109,15 @@ class MacAddressSupport:
             if prefix in self.mac_to_vendor:
                 return self.mac_to_vendor[prefix]
         return None
+
+    def get_full_vendor_name(self, short_name: str) -> Optional[str]:
+        """
+        Get the full vendor name given a short name.
+
+        :param short_name: The short name of the vendor.
+        :return: The full vendor name if found, otherwise None.
+        """
+        return self.short_name_to_full_name.get(short_name)
 
     @staticmethod
     def normalize_mac_address(mac_address: str) -> str:
@@ -136,6 +157,9 @@ class MacAddressSupport:
         return [prefix for prefix, vendor in self.mac_to_vendor.items() if vendor_name.lower() in vendor.lower()]
 
 # Example usage:
+
+
+# Example usage:
 if __name__ == "__main__":
     from pprint import pprint
     mac_support = MacAddressSupport()
@@ -157,23 +181,10 @@ if __name__ == "__main__":
     vendor = "Axis"
     pprint(f"MAC prefixes for vendor {vendor}: {mac_support.list_mac_prefixes_by_vendor(vendor)}")
 
-
-# Example usage:
-if __name__ == "__main__":
-    mac_support = MacAddressSupport()
+   
     mac_address = "6412.2582.f13f"
     print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
 
-    mac1 = "00:00:01:02:03:04"
-    mac2 = "00-00-01-02-03-04"
-    
+    short_name = "Hirschmann"
+    print(f"Full vendor name for short name {short_name}: {mac_support.get_full_vendor_name(short_name)}")
 
-# Example usage:
-if __name__ == "__main__":
-    mac_support = MacAddressSupport()
-    mac_address = "EC:74:BA:88:68:9A"
-    print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
-
-    mac1 = "00:00:01:02:03:04"
-    mac2 = "00-00-01-02-03-04"
-    print(f"MAC addresses {mac1} and {mac2} are equal: {MacAddressSupport.compare_mac_addresses(mac1, mac2)}")
