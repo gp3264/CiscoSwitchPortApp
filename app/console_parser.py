@@ -1,5 +1,79 @@
 import re
 from typing import List, Dict, Any
+from datetime import datetime, timedelta
+
+class TimeParser:
+    def __init__(self, time_string: str):
+        self.time_string = time_string
+        self.time_data = self._parse_time_string()
+
+    def _parse_time_string(self) -> Dict[str, int]:
+        time_data = {
+            'years': 0,
+            'weeks': 0,
+            'days': 0,
+            'hours': 0,
+            'minutes': 0,
+            'seconds': 0,
+        }
+        
+        # Regex patterns for different time formats
+        year_week_pattern = re.compile(r'(\d+)y(\d+)w')
+        week_day_pattern = re.compile(r'(\d+)w(\d+)d')
+        day_hour_pattern = re.compile(r'(\d+)d(\d+)h')
+        hour_minute_second_pattern = re.compile(r'(\d+):(\d+):(\d+)')
+        
+        if year_week_match := year_week_pattern.match(self.time_string):
+            time_data['years'] = int(year_week_match.group(1))
+            time_data['weeks'] = int(year_week_match.group(2))
+        elif week_day_match := week_day_pattern.match(self.time_string):
+            time_data['weeks'] = int(week_day_match.group(1))
+            time_data['days'] = int(week_day_match.group(2))
+        elif day_hour_match := day_hour_pattern.match(self.time_string):
+            time_data['days'] = int(day_hour_match.group(1))
+            time_data['hours'] = int(day_hour_match.group(2))
+        elif hour_minute_second_match := hour_minute_second_pattern.match(self.time_string):
+            time_data['hours'] = int(hour_minute_second_match.group(1))
+            time_data['minutes'] = int(hour_minute_second_match.group(2))
+            time_data['seconds'] = int(hour_minute_second_match.group(3))
+        
+        return time_data
+
+    def get_time_data(self) -> Dict[str, int]:
+        return self.time_data
+
+    def current_date_iso(self) -> str:
+        return datetime.now().isoformat()
+
+    def start_date_iso(self) -> str:
+        current_date = datetime.now()
+        delta = timedelta(
+            days=self.time_data['days'] + self.time_data['weeks'] * 7,
+            hours=self.time_data['hours'],
+            minutes=self.time_data['minutes'],
+            seconds=self.time_data['seconds']
+        )
+        start_date = current_date - delta
+        # Subtract years separately due to how timedelta works
+        start_date = start_date.replace(year=start_date.year - self.time_data['years'])
+        return start_date.isoformat()
+
+# # Sample usage
+# time_strings = [
+#     "1y13w", "4w5d", "00:00:02", "1y13w", "47w3d", "00:01:12",
+#     "7w1d", "3d04h", "14w5d", "7w1d", "00:48:15", "1d05h",
+#     "47w5d", "1w6d", "1y5w", "6d02h", "1d09h", "1w6d", "5w0d",
+#     "00:01:46", "39w3d", "4w1d", "10:55:28", "10:55:18", "1w1d",
+#     "6d02h", "1y13w", "3w1d", "3w1d", "1d04h", "1d11h"
+# ]
+#
+# for time_string in time_strings:
+#     parser = TimeParser(time_string)
+#     print(f"Current date ISO: {parser.current_date_iso()}")
+#     print(f"Time string: {time_string} -> Start date ISO: {parser.start_date_iso()}")
+
+
+
 class ConsoleParser:
     def __init__(self, console_output):
         self.console_output = console_output

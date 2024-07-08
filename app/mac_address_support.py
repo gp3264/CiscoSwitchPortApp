@@ -78,7 +78,7 @@ class MacAddressSupport:
                 if len(parts) >= 3:
                     mac_prefix = parts[0].replace(':', '').lower()
                     short_name = parts[1]
-                    full_name = parts[2]
+                    full_name = ' '.join(parts[2:])
                     mac_to_vendor[mac_prefix] = short_name
                     self.short_name_to_full_name[short_name] = full_name
                 else:
@@ -156,7 +156,54 @@ class MacAddressSupport:
         """
         return [prefix for prefix, vendor in self.mac_to_vendor.items() if vendor_name.lower() in vendor.lower()]
 
+    def display_menu(self) -> None:
+        """
+        Display a menu to look up short name, full name, or MAC address.
+        Get input from the user and display the results.
+        """
+        print("Menu:")
+        print("1. Look up MAC address")
+        print("2. Look up short vendor name")
+        print("3. Look up full vendor name")
+        print("4. Exit")
+
+    def handle_user_input(self) -> None:
+        """
+        Handle user input to look up MAC address, short name, or full name.
+        """
+        while True:
+            self.display_menu()
+            choice = input("Enter your choice: ")
+
+            if choice == '1':
+                mac_address = input("Enter MAC address: ")
+                vendor = self.get_vendor(mac_address)
+                if vendor:
+                    print(f"Vendor for MAC address {mac_address}: {vendor}")
+                else:
+                    print(f"No vendor found for MAC address {mac_address}")
+            elif choice == '2':
+                short_name = input("Enter short vendor name: ")
+                full_name = self.get_full_vendor_name(short_name)
+                if full_name:
+                    print(f"Full vendor name for short name {short_name}: {full_name}")
+                else:
+                    print(f"No full vendor name found for short name {short_name}")
+            elif choice == '3':
+                vendor_name = input("Enter vendor name: ")
+                mac_prefixes = self.list_mac_prefixes_by_vendor(vendor_name)
+                if mac_prefixes:
+                    print(f"MAC prefixes for vendor {vendor_name}: {', '.join(mac_prefixes)}")
+                else:
+                    print(f"No MAC prefixes found for vendor {vendor_name}")
+            elif choice == '4':
+                print("Exiting...")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
 # Example usage:
+
 
 
 # Example usage:
@@ -188,3 +235,9 @@ if __name__ == "__main__":
     short_name = "Hirschmann"
     print(f"Full vendor name for short name {short_name}: {mac_support.get_full_vendor_name(short_name)}")
 
+
+
+if __name__ == "__main__":
+    mac_support = MacAddressSupport()
+    mac_support.handle_user_input()
+1
