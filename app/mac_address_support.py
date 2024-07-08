@@ -1,31 +1,59 @@
+import os
 import re
 import requests
 from typing import Dict, Optional
 
 class MacAddressSupport:
-    def __init__(self, url: str = 'https://www.wireshark.org/download/automated/data/manuf') -> None:
+    def __init__(self, mac_database_file: str = 'manuf', url: str = 'https://www.wireshark.org/download/automated/data/manuf') -> None:
         """
         Initialize the MacAddressSupport class and load the MAC address to Vendor mapping.
 
+        :param mac_database_file: The local file to store the MAC address to Vendor mapping.
         :param url: The URL to download the MAC address to Vendor mapping file.
         :raises ValueError: If the data cannot be loaded or parsed.
         """
+        self.mac_database_file = mac_database_file
         self.url = url
         self.mac_to_vendor = self.load_mac_to_vendor()
 
     def load_mac_to_vendor(self) -> Dict[str, str]:
         """
-        Load the MAC address to Vendor mapping from the specified URL.
+        Load the MAC address to Vendor mapping from the specified URL or local file.
 
         :return: A dictionary with MAC address blocks as keys and vendor names as values.
         :raises ValueError: If the data cannot be loaded or parsed.
         """
+        if not os.path.exists(self.mac_database_file):
+            print(f"File {self.mac_database_file} not found. Downloading from URL...")
+            self.download_mac_database()
+        else:
+            print(f"File {self.mac_database_file} found. Using local file.")
+
+        try:
+            with open(self.mac_database_file, 'r', encoding='utf-8') as file:
+                data = file.read()
+                print(f"Loaded {len(data)} characters from {self.mac_database_file}")
+                if not data.strip():
+                    raise ValueError("Loaded file is empty")
+                return self.parse_manuf_file(data)
+        except Exception as e:
+            raise ValueError(f"Failed to load data from {self.mac_database_file}: {e}")
+
+    def download_mac_database(self) -> None:
+        """
+        Download the MAC address to Vendor mapping from the specified URL and save it to a local file.
+
+        :raises ValueError: If the data cannot be downloaded.
+        """
         try:
             response = requests.get(self.url)
             response.raise_for_status()
-            return self.parse_manuf_file(response.text)
+            print(f"Downloading data from {self.url}...")
+            with open(self.mac_database_file, 'w', encoding='utf-8') as file:
+                file.write(response.text)
+            print(f"MAC database downloaded and saved to {self.mac_database_file}")
         except requests.RequestException as e:
-            raise ValueError(f"Failed to load data from {self.url}: {e}")
+            raise ValueError(f"Failed to download data from {self.url}: {e}")
 
     def parse_manuf_file(self, data: str) -> Dict[str, str]:
         """
@@ -40,11 +68,14 @@ class MacAddressSupport:
             for line in data.splitlines():
                 if line.startswith('#') or not line.strip():
                     continue
-                parts = line.split('\t')
+                parts = re.split(r'\s+', line)
                 if len(parts) >= 3:
-                    mac_prefix = parts[0].strip().replace(':', '').lower()
-                    vendor = parts[2].strip()
+                    mac_prefix = parts[0].replace(':', '').lower()
+                    vendor = parts[2]
                     mac_to_vendor[mac_prefix] = vendor
+                else:
+                    print(f"Skipping invalid line: {line}")
+            print(f"Parsed {len(mac_to_vendor)} entries from the MAC database")
             return mac_to_vendor
         except Exception as e:
             raise ValueError(f"Failed to parse manuf file: {e}")
@@ -95,6 +126,16 @@ class MacAddressSupport:
 if __name__ == "__main__":
     mac_support = MacAddressSupport()
     mac_address = "00:00:01:02:03:04"
+    print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
+
+    mac1 = "00:00:01:02:03:04"
+    mac2 = "00-00-01-02-03-04"
+    print(f"MAC addresses {mac1} and {mac2} are equal: {MacAddressSupport.compare_mac_addresses(mac1, mac2)}")
+
+# Example usage:
+if __name__ == "__main__":
+    mac_support = MacAddressSupport()
+    mac_address = "EC:74:BA:88:68:9A"
     print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
 
     mac1 = "00:00:01:02:03:04"
