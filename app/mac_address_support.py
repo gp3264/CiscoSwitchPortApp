@@ -34,7 +34,11 @@ class MacAddressSupport:
                 data = file.read()
                 print(f"Loaded {len(data)} characters from {self.mac_database_file}")
                 if not data.strip():
-                    raise ValueError("Loaded file is empty")
+                    print("Local file is empty, downloading data from URL...")
+                    self.download_mac_database()
+                    with open(self.mac_database_file, 'r', encoding='utf-8') as file:
+                        data = file.read()
+                        print(f"Loaded {len(data)} characters from {self.mac_database_file} after re-downloading")
                 return self.parse_manuf_file(data)
         except Exception as e:
             raise ValueError(f"Failed to load data from {self.mac_database_file}: {e}")
@@ -125,12 +129,12 @@ class MacAddressSupport:
 # Example usage:
 if __name__ == "__main__":
     mac_support = MacAddressSupport()
-    mac_address = "00:00:01:02:03:04"
+    mac_address = "6412.2582.f13f"
     print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
 
     mac1 = "00:00:01:02:03:04"
     mac2 = "00-00-01-02-03-04"
-    print(f"MAC addresses {mac1} and {mac2} are equal: {MacAddressSupport.compare_mac_addresses(mac1, mac2)}")
+    
 
 # Example usage:
 if __name__ == "__main__":
