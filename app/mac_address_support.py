@@ -1,7 +1,7 @@
 import os
 import re
 import requests
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 class MacAddressSupport:
     def __init__(self, mac_database_file: str = 'manuf', url: str = 'https://www.wireshark.org/download/automated/data/manuf') -> None:
@@ -125,6 +125,38 @@ class MacAddressSupport:
             return MacAddressSupport.normalize_mac_address(mac1) == MacAddressSupport.normalize_mac_address(mac2)
         except ValueError:
             return False
+
+    def list_mac_prefixes_by_vendor(self, vendor_name: str) -> List[str]:
+        """
+        List all MAC prefixes for a given vendor.
+
+        :param vendor_name: The name of the vendor.
+        :return: A list of MAC prefixes for the specified vendor.
+        """
+        return [prefix for prefix, vendor in self.mac_to_vendor.items() if vendor_name.lower() in vendor.lower()]
+
+# Example usage:
+if __name__ == "__main__":
+    from pprint import pprint
+    mac_support = MacAddressSupport()
+    mac_address = "00:00:01:02:03:04"
+    print(f"Vendor for {mac_address}: {mac_support.get_vendor(mac_address)}")
+
+    mac1 = "00:00:01:02:03:04"
+    mac2 = "00-00-01-02-03-04"
+    print(f"MAC addresses {mac1} and {mac2} are equal: {MacAddressSupport.compare_mac_addresses(mac1, mac2)}")
+
+    vendor = "Xerox"
+    pprint(f"MAC prefixes for vendor {vendor}: {mac_support.list_mac_prefixes_by_vendor(vendor)}")
+
+
+    vendor = "Hirschmann"
+    pprint(f"MAC prefixes for vendor {vendor}: {mac_support.list_mac_prefixes_by_vendor(vendor)}")
+
+
+    vendor = "Axis"
+    pprint(f"MAC prefixes for vendor {vendor}: {mac_support.list_mac_prefixes_by_vendor(vendor)}")
+
 
 # Example usage:
 if __name__ == "__main__":
