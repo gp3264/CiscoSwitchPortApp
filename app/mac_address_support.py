@@ -1,7 +1,7 @@
 import os
 import re
 import requests
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Any
 
 class MacAddressSupport:
     def __init__(self, mac_database_file: str = 'manuf', url: str = 'https://www.wireshark.org/download/automated/data/manuf') -> None:
@@ -16,6 +16,31 @@ class MacAddressSupport:
         self.url = url
         self.mac_to_vendor = self.load_mac_to_vendor()
         self.short_name_to_full_name = self.build_short_name_to_full_name_mapping()
+
+    def perform_request(self, method: str, url: str, data: Optional[Dict[str, Any]] = None, headers: Optional[Dict[str, str]] = None, verify: bool = True) -> requests.Response:
+        """
+        Perform an HTTP request using the specified method.
+
+        :param method: The HTTP method to use ('GET' or 'POST').
+        :param url: The URL to send the request to.
+        :param data: The data to send in the request (for POST requests).
+        :param headers: Optional headers to include in the request.
+        :param verify: Whether to verify SSL certificates.
+        :return: The HTTP response object.
+        :raises ValueError: If the request fails.
+        """
+        try:
+            if method.upper() == 'GET':
+                response = requests.get(url, headers=headers, verify=verify)
+            elif method.upper() == 'POST':
+                response = requests.post(url, data=data, headers=headers, verify=verify)
+            else:
+                raise ValueError(f"Unsupported HTTP method: {method}")
+            
+            response.raise_for_status()
+            return response
+        except requests.RequestException as e:
+            raise ValueError(f"Failed to perform {method} request to {url}: {e}")
 
     def load_mac_to_vendor(self) -> Dict[str, str]:
         """
@@ -51,13 +76,12 @@ class MacAddressSupport:
         :raises ValueError: If the data cannot be downloaded.
         """
         try:
-            response = requests.get(self.url)
-            response.raise_for_status()
+            response = self.perform_request('GET', self.url, verify=False)  # Bypass SSL verification
             print(f"Downloading data from {self.url}...")
             with open(self.mac_database_file, 'w', encoding='utf-8') as file:
                 file.write(response.text)
             print(f"MAC database downloaded and saved to {self.mac_database_file}")
-        except requests.RequestException as e:
+        except ValueError as e:
             raise ValueError(f"Failed to download data from {self.url}: {e}")
 
     def parse_manuf_file(self, data: str) -> Dict[str, str]:
@@ -203,7 +227,9 @@ class MacAddressSupport:
                 print("Invalid choice. Please try again.")
 
 # Example usage:
-
+if __name__ == "__main__":
+    mac_support = MacAddressSupport()
+    mac_support.handle_user_input()
 
 
 # Example usage:
