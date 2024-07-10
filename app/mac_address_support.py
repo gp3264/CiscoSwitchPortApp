@@ -231,7 +231,6 @@ if __name__ == "__main__":
     mac_support = MacAddressSupport()
     mac_support.handle_user_input()
 
-
 # Example usage:
 if __name__ == "__main__":
     from pprint import pprint
