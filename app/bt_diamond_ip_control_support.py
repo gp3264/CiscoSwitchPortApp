@@ -32,6 +32,7 @@ class IPControlAPIContainer:
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json'
+            ''
         }
         data = {
             'username': self.username,

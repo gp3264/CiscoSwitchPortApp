@@ -4,7 +4,7 @@ from pyad import aduser, pyad, adquery
 from ldap3 import Server, Connection, ALL
 from netmiko import ConnectHandler
 from .models import Database, Device, MdtaRegion, Config
-from .lansweeper_db import LansweeperLocalDB
+
 
 main = Blueprint('main', __name__)
 
@@ -38,13 +38,6 @@ class AuthService:
             print(f"Authentication failed: {e}")
         return False
 
-def get_lansweeper_db():
-    return LansweeperLocalDB(
-        server=current_app.config['LANSWEEPER_SERVER'],
-        database=current_app.config['LANSWEEPER_DATABASE'],
-        username=current_app.config['LANSWEEPER_USERNAME'],
-        password=current_app.config['LANSWEEPER_PASSWORD']
-    )
 
 @main.route('/')
 def index():
@@ -153,3 +146,9 @@ def assets():
         return jsonify(assets), 200
     except pyodbc.Error as err:
         return jsonify({'error': str(err)}), 500
+    
+    
+    
+@main.route('/test')
+def test():
+    return render_template('sampleAjax1.html')

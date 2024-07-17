@@ -4,6 +4,7 @@ import random
 import webbrowser
 import socket
 from app import FlaskApp
+import warnings
 
 ##def find_free_port():
 ##    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -23,6 +24,5 @@ app_instance = FlaskApp().create_app()
 if __name__ == "__main__":
     port = find_free_port()
     url = f"http://127.0.0.1:{port}"
-    webbrowser.open(url)
+    webbrowser.open(url)    
     app_instance.run(port=port)
-   

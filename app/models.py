@@ -1,9 +1,6 @@
 import os
 from .database import Database
 from email.headerregistry import UniqueAddressHeader
-
-db = Database.db
-
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()

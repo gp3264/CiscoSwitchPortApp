@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask AJAX Example</title>
+     <link rel="stylesheet" href="../static/jquery-ui-1.13.3/jquery-ui.css">
+    <script src="../static/jquery-3.7.1.min.js"></script>
+    <script src="../static/jquery-ui-1.13.3/jquery-ui.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+        }
+        .header, .footer {
+            background-color: #3f51b5;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .content {
+            display: flex;
+            flex: 1;
+        }
+        .left, .right {
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: white;
+        }
+        .left {
+            width: 200px;
+            background-color: #e0e0e0;
+        }
+        .right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .menubar {
+            background-color: gray;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .menubar ul {
+        	background-color: #4caf50;
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .menubar ul li {
+        	background-color: #3f51b5;
+        	color: white;
+            position: relative;
+        }
+        .menubar ul li a {
+            background-color: #3f51b5;
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+        }
+        .menubar ul li ul {
+
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: white;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ddd;
+        }
+        .menubar ul li ul li {
+            width: 200px;
+        }
+        .menubar ul li ul li a {
+            color: white;
+        }
+        .menubar ul li:hover ul {
+            display: block;
+        }
+        .tabs {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
+        .ui-tabs .ui-tabs-nav {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            border-bottom: 1px solid #ddd;
+        }
+        .ui-tabs .ui-tabs-nav li {
+            display: inline-block;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+            background-color: #f1f1f1;
+        }
+        .ui-tabs .ui-tabs-nav li a {
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .ui-tabs .ui-tabs-nav li.ui-tabs-active {
+            background-color: white;
+            border-bottom: 1px solid white;
+        }
+        .ui-tabs .ui-tabs-panel {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: white;
+            border-radius: 0 5px 5px 5px;
+        }
+        .statusbar {
+            background-color: gray;
+            color: white;
+            padding: 10px;
+            margin-top: auto;
+        }
+    </style>
+
+    
+</head>
+<body>
+    <div class="header">Header Banner</div>
+    <div class="content">
+        <div class="left">-</div>
+        <div class="right">
+            <div class="menubar">
+                <ul id="menu">
+                    <li><a href="#">Menu 1</a>
+                        <ul>
+                            <li><a href="#">Submenu 1.1</a></li>
+                            <li><a href="#">Submenu 1.2</a></li>
+                            <li><a href="#">Submenu 1.3</a></li>
+                            <li><a href="#">Submenu 1.4</a></li>
+                            <li><a href="#">Submenu 1.5</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Menu 2</a>
+                        <ul>
+                            <li><a href="#">Submenu 2.1</a></li>
+                            <li><a href="#">Submenu 2.2</a></li>
+                            <li><a href="#">Submenu 2.3</a></li>
+                            <li><a href="#">Submenu 2.4</a></li>
+                            <li><a href="#">Submenu 2.5</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Menu 3</a>
+                        <ul>
+                            <li><a href="#">Submenu 3.1</a></li>
+                            <li><a href="#">Submenu 3.2</a></li>
+                            <li><a href="#">Submenu 3.3</a></li>
+                            <li><a href="#">Submenu 3.4</a></li>
+                            <li><a href="#">Submenu 3.5</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="tabs">
+                <div id="tabs">
+                    <ul>
+                        <li><a href="#tabs-1">Tab 1</a></li>
+                        <li><a href="#tabs-2">Tab 2</a></li>
+                        <li><a href="#tabs-3">Tab 3</a></li>
+                    </ul>
+                    <div id="tabs-1">Content for Tab 1</div>
+                    <div id="tabs-2">Content for Tab 2</div>
+                    <div id="tabs-3">Content for Tab 3</div>
+                </div>
+            </div>
+            <div class="statusbar">-</div>
+        </div>
+    </div>
+    <div class="footer"> </div>
+
+    <script>
+        $(document).ready(function(){
+            $("#menu").menu({
+                items: "> :not(.ui-widget-header)"
+            });
+            $("#tabs").tabs();
+            console.log("jQuery and jQuery UI initialized successfully.");
+        });
+    </script>
+</body>
+</html>
