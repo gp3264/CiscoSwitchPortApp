@@ -11,6 +11,6 @@ netmiko
 pyad
 pywin32
 TextFSM
-ntc-templates
+ntc-templates==6.0.0
 python-nmap
 scapy
