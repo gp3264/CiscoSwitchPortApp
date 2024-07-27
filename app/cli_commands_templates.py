@@ -1,11 +1,14 @@
 import os
+import sys
 from typing import Any, List, Dict
 from app.cli_connection import CLIConnection
 from textfsm import TextFSM
 
+
 class CLICommandsTemplates:
     
     TEMPLATE_PATH = '../venv/Lib/site-packages/ntc_templates/templates'
+
     @staticmethod
     def parse_output(template_name: str, command_output: str) -> List[Dict[str, Any]]:
         """
@@ -87,6 +90,26 @@ class CLICommandsTemplates:
             return CLICommandsTemplates.parse_output('cisco_ios_show_interfaces.textfsm', output)
         except Exception as e:
             raise RuntimeError("Failed to run or parse 'show interfaces'") from e
+        
+    @staticmethod
+    def show_interfaces_switchport(connection: CLIConnection) -> List[Dict[str, Any]]:
+        """
+        Run 'show interfaces switchport' command and return the parsed output.
+
+        :param connection: CLIConnection instance
+        :return: Parsed output of the command
+        :raises RuntimeError: If the command execution or parsing fails
+        """
+        try:
+            output = connection.run_command('show interfaces')
+            print(output)
+            return CLICommandsTemplates.parse_output('cisco_ios_show_interfaces_switchport.textfsm', output)
+        except Exception as e:
+            raise RuntimeError("Failed to run or parse 'show interfaces switchport'") from e
+        
+         
+        
+        
 
     @staticmethod
     def show_ip_route(connection: CLIConnection) -> List[Dict[str, Any]]:
@@ -275,6 +298,147 @@ class CLICommandsTemplates:
         except Exception as e:
             raise RuntimeError("Failed to exit config mode") from e
 
+
+class CLIExecutive(CLICommandsTemplates):
+
+    def __init__(self):
+        self._is_connected: bool = False
+        self._device: Dict[str, Any] = {}
+        self._data:Any = None
+        self._connection: CLIConnection = None
+    
+    def setup_device(self, username="user", password="password", host="0.0.0.0", secret="enable_password", device_type="cisco_ios"):
+        self._device: Dict[str, Any] = {
+        'device_type': device_type,
+        'host': host,  # '10.95.72.22',
+        'username': username,  # 'gphillips3',
+        'password': password,  # '',
+        'secret': secret ,  # 'enable_password',
+        }
+    
+    def enter_enable_mode(self):
+        if self._is_connected:
+            self.connection.enter_enable_mode()
+        else :
+            print(f'Device Not connected', file=sys.stderr) 
+    
+    
+    @property
+    def device(self):
+        return self._device
+    
+    @device.setter
+    def device(self, **kwargs):
+        self._device: Dict[str, Any] = {
+        'device_type': kwargs.get('device_type', ''),
+        'host': kwargs.get('host', ''),  # '10.95.72.22',
+        'username': kwargs.get('username', ''),  # 'gphillips3',
+        'password': kwargs.get('password', ''),  # '',
+        'secret': kwargs('secret', '') ,  # 'enable_password',
+        }
+        
+
+    
+    def _is_device_connection_fields_Ok(self) -> bool:
+        return ((self._device['device_type'] is not None or self._device['device_type'] != "") and   
+                (self._device['host'] is None or self._device['host'] != "") and  
+                (self._device['username'] is None or self._device['username'] != "")  and  
+                (self._device['password'] is None or self._device['password'] != "")  and  
+                (self._device['secret'] is None or self._device['secret'] != ""))
+    
+    def connect(self) -> bool:
+        if self._is_device_connection_fields_Ok(): 
+            self._connection = CLIConnection(**self._device)
+            self._is_connected = True
+            return self.connection
+        else:
+            try:
+                raise Exception("Device Properties not set")
+            except Exception as e:
+                print(f'Device Connection Error: {e}', file=sys.stderr) 
+                return None
+                
+    def disconnect(self) -> bool:
+        try:
+            self._connection.disconnect()
+            self._is_connected = False
+            return True
+        except Exception as e:
+            print(f'Connection Error: {e}', file=sys.stderr) 
+            return False
+ 
+     
+    @property
+    def connected(self):
+        return self._is_connected
+        
+        
+    @property
+    def host(self):
+        return self._device['host']
+    
+    @host.setter
+    def host(self, host:str):
+        try:
+            self.disconnect()
+        except:
+            pass
+        self.setup_device(self._device['username'], self._device['password'], host, self._device['secret'], self._device['device_type'])
+        
+    @property
+    def username(self):
+        return self._device['username']
+    
+    @username.setter
+    def username(self, username:str):
+        try:
+            self.disconnect()
+        except:
+            pass
+        self.setup_device(username, self._device['password'], self._device['host'], self._device['secret'], self._device['device_type'])
+    
+    @property
+    def password(self):
+        return self._device['password']
+    
+    @password.setter
+    def password(self, password:str):
+        try:
+            self.disconnect()
+        except:
+            pass
+        self.setup_device(self._device['username'], password, self._device['host'], self._device['secret'], self._device['device_type'])
+        
+    @property
+    def secret(self):
+        return self._device['password']
+    
+    @secret.setter
+    def secret(self, secret:str):
+        try:
+            self.disconnect()
+        except:
+            pass
+        self.setup_device(self._device['username'], self._device['password'], self._device['host'], secret, self._device['device_type'])
+    
+    @property
+    def connection(self):
+        return self._connection
+    
+    @connection.setter
+    def connection(self, connection):
+        self._connection = connection
+        
+        
+    @property
+    def data(self)->Any:
+        return self._data
+    
+    @data.setter
+    def data(self, data:Any):
+        self._data = data
+
+
 # Example usage:
 if __name__ == "__main__":
 #    from app.cli_connection import CLIConnection
@@ -282,9 +446,9 @@ if __name__ == "__main__":
 
     device: Dict[str, Any] = {
         'device_type': 'cisco_ios',
-        'host': '10.95.72.22',
-        'username': 'gphillips3',
-        'password': '02121103!Jun24',
+        'host': '0.0.0.0',
+        'username': 'user',
+        'password': 'password',
         'secret': 'enable_password',
     }
 
@@ -297,8 +461,8 @@ if __name__ == "__main__":
     #    print("\nShow Version:")
     #    print(CLICommandsTemplates.show_version(connection))
 
-        #print("\nShow Running Config:")
-        #print(CLICommandsTemplates.show_running_config(connection))
+        # print("\nShow Running Config:")
+        # print(CLICommandsTemplates.show_running_config(connection))
 
         print("\nShow Interfaces:")
         pprint(CLICommandsTemplates.show_interfaces(connection))
@@ -309,8 +473,8 @@ if __name__ == "__main__":
     #    print("\nShow IP ARP:")
     #    print(CLICommandsTemplates.show_ip_arp(connection))
 
-    #    print("\nShow MAC Address Table:")
-    #    print(CLICommandsTemplates.show_mac_address_table(connection))
+        print("\nShow MAC Address Table:")
+        pprint(CLICommandsTemplates.show_mac_address_table(connection))
 
     #    print("\nShow VLAN Brief:")
     #    print(CLICommandsTemplates.show_vlan_brief(connection))
@@ -325,8 +489,8 @@ if __name__ == "__main__":
 #        print(f"\nShow Interface {interface}:")
 #        print(CLICommandsTemplates.show_interface(connection, interface))
 
-        #print(f"\nShow Interface Status:")
-        #pprint(CLICommandsTemplates.show_interface_status(connection))
+        # print(f"\nShow Interface Status:")
+        # pprint(CLICommandsTemplates.show_interface_status(connection))
 
         # print(f"\nEntering config mode to shutdown Interface {interface}:")
         # CLICommandsTemplates.enter_config_mode(connection)
