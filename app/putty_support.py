@@ -348,4 +348,4 @@ class PuttySupport:
 #PuttySupport.launch_putty("user", "pw", "10.95.72.22")
 
 # To launch PuTTY with a configuration file
-PuttySupport.launch_putty_with_config("mdta-bhtfair-mls1","user", "pw",)
+PuttySupport.launch_putty_with_config("mdta-bhtfair-mls1","gphillips3", "02121103!Jun24",)

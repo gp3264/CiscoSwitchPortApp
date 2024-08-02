@@ -1,8 +1,109 @@
 import os
 import sys
-from typing import Any, List, Dict
+import re
+from typing import Any, List, Dict, Optional
 from app.cli_connection import CLIConnection
 from textfsm import TextFSM
+
+
+
+class CiscoInterfaceTimeParser:
+    TIME_FORMATS = [
+        r'^(?P<hours>\d+):(?P<minutes>\d+):(?P<seconds>\d+)$',  # HH:MM:SS
+        r'^(?P<days>\d+)d(?P<hours>\d+)h$',  # DDhHH
+        r'^(?P<weeks>\d+)w(?P<days>\d+)d$',  # WWdDD
+        r'^(?P<years>\d+)y(?P<weeks>\d+)w$',  # YYwWW
+        r'^never$'  # never
+    ]
+
+    @staticmethod
+    def parse_time_string(time_str: str) -> Optional[int]:
+        """
+        Parse a time string and return the number of seconds.
+
+        :param time_str: The time string to parse.
+        :return: The number of seconds, or None if the time string is 'never'.
+        """
+        if time_str == 'never':
+            return None
+
+        for time_format in CiscoInterfaceTimeParser.TIME_FORMATS:
+            match = re.match(time_format, time_str)
+            if match:
+                time_dict = match.groupdict()
+                return CiscoInterfaceTimeParser.calculate_seconds(time_dict)
+
+        raise ValueError(f"Unrecognized time format: {time_str}")
+
+    @staticmethod
+    def calculate_seconds(time_dict: dict) -> int:
+        """
+        Calculate the number of seconds from a time dictionary.
+
+        :param time_dict: A dictionary containing time components.
+        :return: The number of seconds.
+        """
+        seconds = 0
+        if 'seconds' in time_dict:
+            seconds += int(time_dict['seconds'])
+        if 'minutes' in time_dict:
+            seconds += int(time_dict['minutes']) * 60
+        if 'hours' in time_dict:
+            seconds += int(time_dict['hours']) * 3600
+        if 'days' in time_dict:
+            seconds += int(time_dict['days']) * 86400
+        if 'weeks' in time_dict:
+            seconds += int(time_dict['weeks']) * 604800
+        if 'years' in time_dict:
+            seconds += int(time_dict['years']) * 31536000
+        return seconds
+
+    @staticmethod
+    def is_time_over_days(time_str: str, days: int) -> bool:
+        """
+        Evaluate if the parsed time is over a certain number of days.
+
+        :param time_str: The time string to parse.
+        :param days: The number of days to compare against.
+        :return: True if the parsed time is over the given number of days, False otherwise.
+        """
+        seconds = CiscoInterfaceTimeParser.parse_time_string(time_str)
+        if seconds is None:
+            return False  # 'never' should not be considered over any time period
+        return seconds > days * 86400
+
+    @staticmethod        
+    def convert_seconds_to_time(seconds: int) -> str:
+        """
+        Convert a number of seconds to a human-readable time format.
+
+        :param seconds: The number of seconds.
+        :return: A string representing the time in a human-readable format.
+        """
+        if seconds is None:
+            return 'never'
+        
+        years, seconds = divmod(seconds, 31536000)
+        weeks, seconds = divmod(seconds, 604800)
+        days, seconds = divmod(seconds, 86400)
+        hours, seconds = divmod(seconds, 3600)
+        minutes, seconds = divmod(seconds, 60)
+
+        time_str = ""
+        if years > 0:
+            time_str += f"{years}y"
+        if weeks > 0:
+            time_str += f"{weeks}w"
+        if days > 0:
+            time_str += f"{days}d"
+        if hours > 0:
+            time_str += f"{hours}h"
+        if minutes > 0 or (hours > 0 and seconds > 0):  # Include minutes if there are hours or seconds
+            time_str += f"{minutes}m"
+        if seconds > 0:
+            time_str += f"{seconds}s"
+
+        return time_str or "0s"
 
 
 class CLICommandsTemplates:
@@ -87,6 +188,7 @@ class CLICommandsTemplates:
         """
         try:
             output = connection.run_command('show interfaces')
+            #print(output)
             return CLICommandsTemplates.parse_output('cisco_ios_show_interfaces.textfsm', output)
         except Exception as e:
             raise RuntimeError("Failed to run or parse 'show interfaces'") from e
@@ -101,15 +203,11 @@ class CLICommandsTemplates:
         :raises RuntimeError: If the command execution or parsing fails
         """
         try:
-            output = connection.run_command('show interfaces')
-            print(output)
+            output = connection.run_command('show interfaces switchport')
+   
             return CLICommandsTemplates.parse_output('cisco_ios_show_interfaces_switchport.textfsm', output)
         except Exception as e:
             raise RuntimeError("Failed to run or parse 'show interfaces switchport'") from e
-        
-         
-        
-        
 
     @staticmethod
     def show_ip_route(connection: CLIConnection) -> List[Dict[str, Any]]:
@@ -140,6 +238,25 @@ class CLICommandsTemplates:
             return CLICommandsTemplates.parse_output('cisco_ios_show_ip_arp.textfsm', output)
         except Exception as e:
             raise RuntimeError("Failed to run or parse 'show ip arp'") from e
+    
+    @staticmethod
+    def show_ip_interface(connection: CLIConnection) -> List[Dict[str, Any]]:
+        """
+        Run 'show ip interface' command and return the parsed output.
+
+        :param connection: CLIConnection instance
+        :return: Parsed output of the command
+        :raises RuntimeError: If the command execution or parsing fails
+        """
+        try:
+            output = connection.run_command('show ip interface')
+            #print(output)
+            return CLICommandsTemplates.parse_output('cisco_ios_show_ip_interface.textfsm', output)
+        except Exception as e:
+            raise RuntimeError("Failed to run or parse 'show ip interface'") from e        
+        
+    
+        
 
     @staticmethod
     def show_mac_address_table(connection: CLIConnection) -> List[Dict[str, Any]]:
@@ -319,9 +436,8 @@ class CLIExecutive(CLICommandsTemplates):
     def enter_enable_mode(self):
         if self._is_connected:
             self.connection.enter_enable_mode()
-        else :
+        else:
             print(f'Device Not connected', file=sys.stderr) 
-    
     
     @property
     def device(self):
@@ -336,8 +452,6 @@ class CLIExecutive(CLICommandsTemplates):
         'password': kwargs.get('password', ''),  # '',
         'secret': kwargs('secret', '') ,  # 'enable_password',
         }
-        
-
     
     def _is_device_connection_fields_Ok(self) -> bool:
         return ((self._device['device_type'] is not None or self._device['device_type'] != "") and   
@@ -348,10 +462,21 @@ class CLIExecutive(CLICommandsTemplates):
     
     def connect(self) -> bool:
         if self._is_device_connection_fields_Ok(): 
-            self._connection = CLIConnection(**self._device)
+            
+            try:
+                self._connection = CLIConnection(**self._device)
+            except Exception as e:
+                self._is_connected = False 
+                print(f'Connection Error: {e}', file=sys.stderr) 
+                return None
+            
             self._is_connected = True
             return self.connection
         else:
+            
+            self._is_connected = False 
+            
+            
             try:
                 raise Exception("Device Properties not set")
             except Exception as e:
@@ -366,12 +491,10 @@ class CLIExecutive(CLICommandsTemplates):
         except Exception as e:
             print(f'Connection Error: {e}', file=sys.stderr) 
             return False
- 
      
     @property
     def connected(self):
         return self._is_connected
-        
         
     @property
     def host(self):
@@ -429,9 +552,8 @@ class CLIExecutive(CLICommandsTemplates):
     def connection(self, connection):
         self._connection = connection
         
-        
     @property
-    def data(self)->Any:
+    def data(self) -> Any:
         return self._data
     
     @data.setter

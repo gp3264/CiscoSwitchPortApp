@@ -222,6 +222,7 @@ from typing import List, Dict, Any, Union
 from collections import Counter
 import statistics
 
+
 class DictListStatisticsReport(DictListProcessor):
     def __init__(self, data: List[Dict[str, Any]]) -> None:
         """
@@ -242,6 +243,8 @@ class DictListStatisticsReport(DictListProcessor):
         :rtype: Dict[Any, int]
         """
         values = [item.get(property_name) for item in self.data]
+        
+        
         return dict(Counter(values))
 
     def get_statistics(self, property_name: str) -> Dict[str, float]:
@@ -487,16 +490,18 @@ class DataStatisticsProcessor:
         else:
             return [data]
 
-# Sample data
-data = [
-    {"name": "Alice", "details": {"age": 30, "city": "New York"}},
-    {"name": "Bob", "details": {"age": 25, "city": "San Francisco"}},
-    {"name": "Charlie", "details": {"age": 35, "city": "New York"}},
-    {"name": "David", "details": {"age": 40, "city": "Chicago"}},
-]
 
-# Creating instances and generating the report
-processor = DataStatisticsProcessor(data)
-report_generator = DataStatisticsReport(processor)
-report = report_generator.generate_report()
-print(report)
+if __name__ == '__main__':
+    # Sample data
+    data = [
+        {"name": "Alice", "details": {"age": 30, "city": "New York"}},
+        {"name": "Bob", "details": {"age": 25, "city": "San Francisco"}},
+        {"name": "Charlie", "details": {"age": 35, "city": "New York"}},
+        {"name": "David", "details": {"age": 40, "city": "Chicago"}},
+    ]
+    
+    # Creating instances and generating the report
+    processor = DataStatisticsProcessor(data)
+    report_generator = DataStatisticsReport(processor)
+    report = report_generator.generate_report()
+    print(report)

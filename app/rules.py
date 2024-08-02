@@ -1,5 +1,5 @@
 from types import Any
-
+from app.cli_commands_templates import CiscoInterfaceTimeParser
 
 class SwitchPortRules:
     def __init__(self):
