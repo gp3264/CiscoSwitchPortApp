@@ -44,6 +44,10 @@ class MainDataRetrieval:
         for region in self.region_nodes['MDTA_Regions']:
             for node in region['nodes']:
                 
+                info_flags = InfoErrorFlags()
+                error_flags = InfoErrorFlags() 
+                
+                
                 network_device = NetworkDeviceEntry(
                     textfsm_templates_active = InfoErrorFlags(),
                     textfsm_templates_errors = InfoErrorFlags(),
