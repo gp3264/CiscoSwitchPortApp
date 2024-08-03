@@ -1,5 +1,5 @@
 from typing import Dict, List, Any
-from app.cli_commands_templates import CLIExecutive, CLIExecutive
+from app.cli_commands_templates import CLIExecutive
 from app.console_parser import ShowArpParser
 from app.mac_address_support import MacAddressSupport
 from app.file_support import FileHandler
@@ -101,9 +101,9 @@ if __name__ == '__main__':
         
         
         #
-        # print("\n\nSHOW INTERFACE STATUS:")
-        # show_interface_status:List = cli.show_interface_status(cli.connection)
-        # print(pformat(show_interface_status))
+        print("\n\nSHOW INTERFACE STATUS:")
+        show_interface_status:List = cli.show_interface_status(cli.connection)
+        print(pformat(show_interface_status))
         #
         # report_generator = DictListStatisticsReport(show_interface_status)
         # report = report_generator.generate_report("PORT")

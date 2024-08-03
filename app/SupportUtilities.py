@@ -6,6 +6,7 @@ import re
 from typing import Tuple,List, TypeVar, Any, Sequence, Optional, overload, Union , Dict, List,  TypeVar, Type
 from app.UtilityLogger import UtilityLogger as CustomLogger, LOG_LEVEL_DEBUG
 from rapid7vmconsole import PageInfo
+from datetime import datetime, timedelta
 
 
 
@@ -30,6 +31,143 @@ from rapid7vmconsole import PageInfo
     #         interface_data['last_output_hang'] = self.parse_time_string(last_output_hang_match.group(1))
     #
     #     return interface_data
+
+
+
+
+
+class TaskProgressIndicator:
+    def __init__(self, task_name: str, total_steps: int):
+        self.task_name = task_name
+        self.total_steps = total_steps
+        self.current_step = 0
+        self.hourglass_states: Dict = {
+            0: f"\u25d0 ",
+            1: f"\u25d3 ",
+            2: f"\u25d1 ",
+            3: f"\u25d2 ",
+        }
+        self.hourglass_current_state: int = 0
+        self.sub_tasks: List[TaskProgressIndicator] = []
+        self.start_time: datetime = None
+        self.end_time: datetime = None
+        
+    def add_sub_task(self, sub_task_name: str, total_steps: int):
+        """Add a sub-task to the current task."""
+        sub_task = TaskProgressIndicator(sub_task_name, total_steps)
+        self.sub_tasks.append(sub_task)
+        return sub_task
+
+    def update_progress(self, step_increment: int = 1) -> str:
+        """Update the task progress by a specified step increment and print the current status."""
+        self.current_step += step_increment
+        if self.current_step > self.total_steps:
+            self.current_step = self.total_steps
+        msg = self.print_progress()
+        return msg
+
+    def update_all_progress(self, main_task_increment: int = 1, sub_task_increments: Dict[str, int] = None) -> None:
+        """Update the progress of the main task and all sub-tasks."""
+        self.update_progress(main_task_increment)
+        
+        if sub_task_increments:
+            for sub_task_name, increment in sub_task_increments.items():
+                self.update_sub_task_progress(sub_task_name, increment)
+
+    def print_progress(self) -> str:
+        """Print the current progress as a percentage of the total task completion with a bar graph."""
+        full_block_char ='\u2588'
+        percentage = (self.current_step / self.total_steps) * 100
+        bar_length = 20
+        filled_length = int(bar_length * self.current_step // self.total_steps)
+        bar = full_block_char * filled_length + "-" * (bar_length - filled_length)
+        msg = f"\r\t  {self.hourglass_states[self.hourglass_current_state]} \u3010 {bar} \u3011  {percentage:.2f}% {self.task_name}"
+        sys.stdout.write(msg)
+        sys.stdout.flush()
+        self.move_hourglass()
+        return msg
+
+    def complete(self) -> str:
+        """Mark the task as complete and print the final status."""
+        self.end()
+        full_block_char = '\u2588'
+        self.current_step = self.total_steps
+        percentage = (self.current_step / self.total_steps) * 100
+        msg = f"\r\t \u2713 \u3010 {full_block_char * 20} \u3011  {percentage:.2f}% {self.task_name} Complete                     "
+        msg = f"{msg}\nStart:{self.start_time} End:{self.end_time} Duration:{self.display_total_time()}"
+        sys.stdout.write(msg)
+        sys.stdout.flush()
+        self.move_hourglass()
+        print()  # Move to the next line after completion
+        return msg
+
+    def move_hourglass(self):
+        """Animate hourglass rotation."""
+        self.hourglass_current_state += 1
+        if self.hourglass_current_state > 3:
+            self.hourglass_current_state = 0
+
+    def update_sub_task_progress(self, sub_task_name: str, step_increment: int = 1) -> None:
+        """Update the progress of a specific sub-task."""
+        for sub_task in self.sub_tasks:
+            if sub_task.task_name == sub_task_name:
+                sub_task.update_progress(step_increment)
+                break
+
+    def complete_sub_task(self, sub_task_name: str) -> None:
+        """Mark a specific sub-task as complete."""
+        for sub_task in self.sub_tasks:
+            if sub_task.task_name == sub_task_name:
+                sub_task.complete()
+                break
+
+    def complete_all(self) -> None:
+        """Mark all tasks, including sub-tasks, as complete."""
+        self.complete()
+        for sub_task in self.sub_tasks:
+            sub_task.complete()
+
+    def update_task_name(self, new_task_name: str) -> None:
+        """Update the name of the task."""
+        self.task_name = new_task_name
+        #print(f"Task name updated to: {self.task_name}")
+
+    def start(self) -> str:
+        """Start the task and record the start time."""
+        self.start_time = datetime.now()
+        return f"Task '{self.task_name}' started at {self.start_time.strftime('%Y-%m-%d %H:%M:%S')}"
+
+    def end(self) -> str:
+        """End the task, record the end time, and display the total time taken."""
+        self.end_time = datetime.now()
+        return f"Task '{self.task_name}' ended at {self.end_time.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+
+    def display_total_time(self) -> str:
+        """Calculate and display the total time taken for the task."""
+        if self.start_time and self.end_time:
+            total_time: timedelta = self.end_time - self.start_time
+            return f"Total time for task '{self.task_name}': {total_time}"
+        else:
+            return f"Start time or end time not recorded for task '{self.task_name}'."
+        
+        
+        
+# # Example usage
+# if __name__ == "__main__":
+#     main_task = TaskProgressIndicator("Main Task", 100)
+#     sub_task_1 = main_task.add_sub_task("Sub Task 1", 50)
+#     sub_task_2 = main_task.add_sub_task("Sub Task 2", 75)
+#
+#     # Update progress for main task and sub-tasks
+#     for _ in range(10):
+#         main_task.update_all_progress(
+#             main_task_increment=10,
+#             sub_task_increments={"Sub Task 1": 5, "Sub Task 2": 7.5},
+#         )
+#
+#     # Complete all tasks
+#     main_task.complete_all()
 
 
 

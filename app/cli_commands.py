@@ -2,6 +2,7 @@ from typing import Any, Dict
 from app.cli_connection import CLIConnection
 
 class CLICommands:
+        
     @staticmethod
     def show_ip_interface_brief(connection: CLIConnection) -> str:
         """
@@ -239,7 +240,7 @@ class CLICommands:
 
 # Example usage:
 if __name__ == "__main__":
-    from app.cli_connection import CLIConnection
+#    from app.cli_connection import CLIConnection
 
     device: Dict[str, Any] = {
         'device_type': 'cisco_ios',

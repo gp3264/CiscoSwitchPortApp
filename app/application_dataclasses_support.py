@@ -16,6 +16,72 @@ class Person:
     email: str
     
 
+@dataclass
+class InfoErrorFlags:
+    """
+    A dataclass to represent a binary word where each bit corresponds to a specific TextFSM template or error code.
+    """
+    class_version:float = 1.0
+    name:str = None
+    description:str = None
+    # Assign a bit position to each template
+    show_version: int = field(default=0, metadata={"bit": 0})
+    show_interface: int = field(default=0, metadata={"bit": 1})
+    show_ip_route: int = field(default=0, metadata={"bit": 2})
+    show_mac_address_table: int = field(default=0, metadata={"bit": 3})
+    show_ip_arp: int = field(default=0, metadata={"bit": 4})
+    show_vlan: int = field(default=0, metadata={"bit": 5})
+    show_cdp_neighbors: int = field(default=0, metadata={"bit": 6})
+    show_ip_interface_brief: int = field(default=0, metadata={"bit": 7})
+    show_inventory: int = field(default=0, metadata={"bit": 8})
+    show_logging: int = field(default=0, metadata={"bit": 9})
+    show_interface_status: int = field(default=0, metadata={"bit": 10})
+    
+    def to_binary_string(self) -> str:
+        """
+        Returns the binary representation of the flags as a 32-bit string.
+        """
+        bits = [self.show_version, self.show_interface, self.show_ip_route,
+                self.show_mac_address_table, self.show_ip_arp, self.show_vlan,
+                self.show_cdp_neighbors, self.show_ip_interface_brief,
+                self.show_inventory, self.show_logging, self.show_interface_status]
+
+        # Create the 32-bit binary string with leading zeros
+        return ''.join(map(str, bits)).zfill(32)
+
+    def to_integer(self) -> int:
+        """
+        Returns the binary word as an integer.
+        """
+        return int(self.to_binary_string(), 2)
+
+    def set_template(self, template_name: str, value: bool) -> None:
+        """
+        Sets the bit corresponding to a specific template.
+        
+        Args:
+            template_name (str): The name of the template to set.
+            value (bool): True to set the bit, False to clear it.
+        """
+        if hasattr(self, template_name):
+            setattr(self, template_name, int(value))
+        else:
+            raise ValueError(f"Template {template_name} does not exist.")
+
+    def clear_all(self) -> None:
+        """
+        Resets all bits to 0.
+        """
+        for field_name in self.__dataclass_fields__:
+            setattr(self, field_name, 0)
+            
+    def __str__(self):
+        return self.to_binary_string()
+
+
+
+
+
 class DataclassConverter(Generic[T]):
     """
     A class to convert dataclass instances to dictionaries.

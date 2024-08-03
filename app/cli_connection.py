@@ -1,3 +1,4 @@
+import os
 from netmiko import ConnectHandler
 import logging
 from typing import Any, Optional, Dict
@@ -31,6 +32,8 @@ class CLIConnection:
         #self.logger.setLevel(logging.INFO)
         self.logger.setLevel(logging.INFO)
         handler = logging.StreamHandler()
+          
+        
         fh = logging.FileHandler(r'..\app\cli_connection.log')
         fmt = '%(asctime)s - %(levelname)s - %(message)s'
         fh.setFormatter(logging.Formatter(fmt))

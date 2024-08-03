@@ -344,10 +344,10 @@ class CLICommandsTemplates:
         :raises RuntimeError: If the command execution or parsing fails
         """
         try:
-            output = connection.run_command('show interface status')
+            output = connection.run_command('show interfaces status')
             return CLICommandsTemplates.parse_output('cisco_ios_show_interfaces_status.textfsm', output)
         except Exception as e:
-            raise RuntimeError("Failed to run or parse 'show interface status'") from e
+            raise RuntimeError("Failed to run or parse 'show interfaces status'") from e
 
     @staticmethod
     def shutdown_interface(connection: CLIConnection, interface: str) -> str:

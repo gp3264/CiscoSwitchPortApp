@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field, fields, asdict, is_dataclass
 from typing import Dict, List, Any, Optional
-
+from app.application_dataclasses_support import InfoErrorFlags
 
 class DataclassDunderMethods:
     """
@@ -136,12 +136,28 @@ class DeviceConnectionData(DataclassDunderMethods):
 
 
 @dataclass
+class ShowVersionData(DataclassDunderMethods):
+    VERSION: Optional[str] = None
+    IMAGE: Optional[str] = None
+    SERIAL: Optional[str] = None
+    MODEL: Optional[str] = None
+    UPTIME: Optional[str] = None
+    HOSTNAME: Optional[str] = None
+    ROM: Optional[str] = None
+    CONFIG_REGISTER: Optional[str] = None
+
+
+
+@dataclass
 class NetworkDeviceEntry(DataclassDunderMethods):
+    textfsm_templates_active:InfoErrorFlags = None
+    textfsm_templates_errors:InfoErrorFlags = None
     switch_hostname:str = None
     switch_ip_address:str = None
     switch_region:str = None
     device_connection_status: Optional[str] = None
     device_connection_data: Optional[DeviceConnectionData] = None
+    show_version_data: Optional[ShowVersionData] = None
     show_interfaces_entry_list: Optional[List[ShowInterfacesEntry]] = field(default_factory=list)
     show_interfaces_status_entry_list: Optional[List[ShowInterfacesStatusEntry]] = field(default_factory=list)
     show_ip_arp_entry_list: Optional[List[ShowIPARPEntry]] = field(default_factory=list)

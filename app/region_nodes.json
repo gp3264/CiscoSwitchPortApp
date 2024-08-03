@@ -1,285 +1,283 @@
 {
     "MDTA_Regions": [
-        {"region_name":"central", "nodes":[
-            {
-                "Node_Name": "mdta-bhtadm-mls1",
-                "IP": "10.95.72.23"
-            },
-            {
-                "Node_Name": "mdta-bhtfair-mls1",
-                "IP": "10.95.72.22"
-            },
-            {
-                "Node_Name": "mdta-bhtmaint-mls1",
-                "IP": "10.95.90.4"
-            },
-            {
-                "Node_Name": "mdta-fmtadm-lan-mls1",
-                "IP": "10.95.88.43"
-            },
-            {
-                "Node_Name": "mdta-fmt-egarage-swt1",
-                "IP": "10.93.83.58"
-            },
-            {
-                "Node_Name": "mdta-fmtmaint-mls1",
-                "IP": "10.95.72.25"
-            },
-            {
-                "Node_Name": "mdta-fmtmaint-swt1",
-                "IP": "10.93.123.162"
-            },
-            {
-                "Node_Name": "mdta-fmtvent-1stflr-swt1",
-                "IP": "10.93.82.37"
-            },
-            {
-                "Node_Name": "mdta-fmtvent-lan-mls1",
-                "IP": "10.95.72.26"
-            },
-            {
-                "Node_Name": "mdta-fmtvent-lan-mls2",
-                "IP": "10.95.90.8"
-            },
-            {
-                "Node_Name": "mdta-fmt-wgarage-swt1",
-                "IP": "10.93.82.12"
-            },
-            {
-                "Node_Name": "mdta-fmt-wvent-swt1",
-                "IP": "10.93.82.11"
-            },
-            {
-                "Node_Name": "MDTA-FSKADM-303-STK1",
-                "IP": "170.93.91.251"
-            },
-            {
-                "Node_Name": "mdta-fskadm-mls1",
-                "IP": "170.93.88.73"
-            },
-            {
-                "Node_Name": "mdta-fskauto-swt1",
-                "IP": "170.93.91.248"
-            },
-            {
-                "Node_Name": "mdta-fskcendepot-swt1",
-                "IP": "170.93.91.249"
-            },
-            {
-                "Node_Name": "mdta-fskeng-flr1-swt1",
-                "IP": "170.93.92.253"
-            },
-            {
-                "Node_Name": "mdta-fskeng-flr2-stk1",
-                "IP": "170.93.92.251"
-            },
-            {
-                "Node_Name": "mdta-fskeng-flr2-swt1",
-                "IP": "170.93.92.5"
-            },
-            {
-                "Node_Name": "mdta-fskeng-flr3-stk1",
-                "IP": "170.93.92.249"
-            },
-            {
-                "Node_Name": "mdta-fskpol-cvsutrailer-swt1",
-                "IP": "170.93.91.47"
-            },
-            {
-                "Node_Name": "mdta-fskpol-rm115-mls1",
-                "IP": "10.95.72.21"
-            },
-            {
-                "Node_Name": "mdta-fskpol-wswt1",
-                "IP": "10.93.76.68"
-            },
-            {
-                "Node_Name": "mdta-icceast-eof-mls1",
-                "IP": "10.95.92.12"
-            },
-            {
-                "Node_Name": "mdta-icceast-mls1",
-                "IP": "10.95.92.32"
-            },
-            {
-                "Node_Name": "mdta-icceof-dc-mls1",
-                "IP": "10.95.75.102"
-            },
-            {
-                "Node_Name": "mdta-icceof-dc-mls2",
-                "IP": "10.95.99.25"
-            },
-            {
-                "Node_Name": "mdta-icceof-dc-mls3",
-                "IP": "10.95.72.89"
-            },
-            {
-                "Node_Name": "mdta-icceof-wan-mls1",
-                "IP": "10.95.98.44"
-            },
-            {
-                "Node_Name": "mdta-icceof-wan-mls2",
-                "IP": "10.95.98.47"
-            },
-            {
-                "Node_Name": "mdta-iccwest-mls1",
-                "IP": "10.95.92.31"
-            },
-            {
-                "Node_Name": "mdta-iccwest-wof-mls1",
-                "IP": "10.95.92.33"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-2340-mls1",
-                "IP": "10.93.76.66"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-bldg2310-1stflr-swt1",
-                "IP": "10.95.76.132"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-bldg2310-2ndflr-swt1",
-                "IP": "10.93.85.2"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-bldg2310-comprm-mls1",
-                "IP": "10.95.72.14"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-bldg2310-comprm-stk1",
-                "IP": "10.93.85.3"
-            },
-            {
-                "Node_Name": "mdta-ptbreeze-bldg2330-mls1",
-                "IP": "10.95.96.59"
-            }
-        ]},
-         { "region_name":"northern", 
-          "nodes" : [
-            {
-                "Node_Name": "mdta-hatemadm-mls1",
-                "IP": "10.95.90.5"
-            },
-            {
-                "Node_Name": "mdta-hatemmaint-mls1",
-                "IP": "10.95.90.10"
-            },
-            {
-                "Node_Name": "mdta-jfkadm-lan-mls1",
-                "IP": "10.95.99.15"
-            },
-            {
-                "Node_Name": "mdta-jfkadm-wswt1",
-                "IP": "10.93.102.62"
-            },
-            {
-                "Node_Name": "mdta-jfketl-gantry1-mls1",
-                "IP": "10.95.99.30"
-            },
-            {
-                "Node_Name": "mdta-jfketl-gantry2-mls1",
-                "IP": "10.95.99.31"
-            },
-            {
-                "Node_Name": "mdta-jfkmaint1-etl-swt1",
-                "IP": "10.95.99.186"
-            },
-            {
-                "Node_Name": "mdta-jfkmaint1-lan-mls1",
-                "IP": "10.95.88.44"
-            },
-            {
-                "Node_Name": "mdta-jfkmaint2-lan-mls1",
-                "IP": "10.95.88.48"
-            },
-            {
-                "Node_Name": "mdta-jfkmsp-lan-mls1",
-                "IP": "10.95.88.49"
-            },
-            {
-                "Node_Name": "mdta-jfk-nbi-swt1",
-                "IP": "170.93.97.246"
-            },
-            {
-                "Node_Name": "mdta-jfk-nbs-swt1",
-                "IP": "170.93.97.245"
-            },
-            {
-                "Node_Name": "mdta-jfksbi-dc-mls1",
-                "IP": "10.95.99.26"
-            },
-            {
-                "Node_Name": "mdta-jfksbi-dc-mls2",
-                "IP": "10.95.99.27"
-            },
-            {
-                "Node_Name": "mdta-jfksbi-dc-mls3",
-                "IP": "10.93.76.64"
-            },
-            {
-                "Node_Name": "mdta-jfk-sbi-swt1",
-                "IP": "170.93.97.247"
-            },
-            {
-                "Node_Name": "mdta-jfk-sbs-swt1",
-                "IP": "170.93.97.248"
-            },
-            {
-                "Node_Name": "mdta-lilianholt-trailer-mls1",
-                "IP": "10.95.96.62"
-            },
-            {
-                "Node_Name": "mdta-lilianholt-trailer-swt1",
-                "IP": "10.93.92.66"
-            },
-            {
-                "Node_Name": "mdta-wm-wmo-mls1",
-                "IP": "10.93.76.67"
-            },
-            {
-                "Node_Name": "mdta-wm-wmo-swt1",
-                "IP": "10.93.74.135"
-            }
-        ]},
-         {"region_name":"southern", 
-          "nodes": [
-            {
-                "Node_Name": "mdta-laneadm-stk1",
-                "IP": "10.93.87.242"
-            },
-            {
-                "Node_Name": "mdta-lane-ngmaint1-swt1",
-                "IP": "10.93.87.253"
-            },
-            {
-                "Node_Name": "mdta-lanepol-egarage-mls1",
-                "IP": "10.95.75.2"
-            },
-            {
-                "Node_Name": "mdta-lanepol-mls1",
-                "IP": "10.95.75.1"
-            },
-            {
-                "Node_Name": "mdta-niceadm-mls1",
-                "IP": "10.95.94.24"
-            },
-            {
-                "Node_Name": "mdta-niceadm-stk1",
-                "IP": "10.93.78.131"
-            },
-            {
-                "Node_Name": "mdta-niceadm-wswt1",
-                "IP": "10.93.123.222"
-            },
-            {
-                "Node_Name": "mdta-nicemaint-stk1",
-                "IP": "170.93.99.187"
-            },
-            {
-                "Node_Name": "mdta-nicewash-swt1",
-                "IP": "170.93.99.186"
-            }
-        ]
+        {
+            "region_name": "central",
+            "nodes": [
+                {
+                    "Node_Name": "mdta-bhtadm-mls1",
+                    "IP": "10.95.72.23"
+                },
+                {
+                    "Node_Name": "mdta-bhtfair-mls1",
+                    "IP": "10.95.72.22"
+                },
+                {
+                    "Node_Name": "mdta-bhtmaint-mls1",
+                    "IP": "10.95.90.4"
+                },
+                {
+                    "Node_Name": "mdta-fmtadm-lan-mls1",
+                    "IP": "10.95.88.43"
+                },
+                {
+                    "Node_Name": "mdta-fmt-egarage-swt1",
+                    "IP": "10.93.83.58"
+                },
+                {
+                    "Node_Name": "mdta-fmtmaint-mls1",
+                    "IP": "10.95.72.25"
+                },
+                {
+                    "Node_Name": "mdta-fmtmaint-swt1",
+                    "IP": "10.93.123.162"
+                },
+                {
+                    "Node_Name": "mdta-fmtvent-1stflr-swt1",
+                    "IP": "10.93.82.37"
+                },
+                {
+                    "Node_Name": "mdta-fmtvent-lan-mls1",
+                    "IP": "10.95.72.26"
+                },
+                {
+                    "Node_Name": "mdta-fmtvent-lan-mls2",
+                    "IP": "10.95.90.8"
+                },
+                {
+                    "Node_Name": "mdta-fmt-wgarage-swt1",
+                    "IP": "10.93.82.12"
+                },
+                {
+                    "Node_Name": "mdta-fmt-wvent-swt1",
+                    "IP": "10.93.82.11"
+                },
+                {
+                    "Node_Name": "MDTA-FSKADM-303-STK1",
+                    "IP": "170.93.91.251"
+                },
+                {
+                    "Node_Name": "mdta-fskadm-mls1",
+                    "IP": "170.93.88.73"
+                },
+                {
+                    "Node_Name": "mdta-fskauto-swt1",
+                    "IP": "170.93.91.248"
+                },
+                {
+                    "Node_Name": "mdta-fskcendepot-swt1",
+                    "IP": "170.93.91.249"
+                },
+                {
+                    "Node_Name": "mdta-fskeng-flr1-swt1",
+                    "IP": "170.93.92.253"
+                },
+                {
+                    "Node_Name": "mdta-fskeng-flr2-stk1",
+                    "IP": "170.93.92.251"
+                },
+                {
+                    "Node_Name": "mdta-fskeng-flr2-swt1",
+                    "IP": "170.93.92.5"
+                },
+                {
+                    "Node_Name": "mdta-fskeng-flr3-stk1",
+                    "IP": "170.93.92.249"
+                },
+                {
+                    "Node_Name": "mdta-fskpol-cvsutrailer-swt1",
+                    "IP": "170.93.91.47"
+                },
+                {
+                    "Node_Name": "mdta-fskpol-rm115-mls1",
+                    "IP": "10.95.72.21"
+                },
+                {
+                    "Node_Name": "mdta-fskpol-wswt1",
+                    "IP": "10.93.76.68"
+                },
+                {
+                    "Node_Name": "mdta-icceast-eof-mls1",
+                    "IP": "10.95.92.12"
+                },
+                {
+                    "Node_Name": "mdta-icceast-mls1",
+                    "IP": "10.95.92.32"
+                },
+                {
+                    "Node_Name": "mdta-icceof-dc-mls1",
+                    "IP": "10.95.75.102"
+                },
+                {
+                    "Node_Name": "mdta-icceof-dc-mls2",
+                    "IP": "10.95.99.25"
+                },
+                {
+                    "Node_Name": "mdta-icceof-dc-mls3",
+                    "IP": "10.95.72.89"
+                },
+                {
+                    "Node_Name": "mdta-icceof-wan-mls1",
+                    "IP": "10.95.98.44"
+                },
+                {
+                    "Node_Name": "mdta-icceof-wan-mls2",
+                    "IP": "10.95.98.47"
+                },
+                {
+                    "Node_Name": "mdta-iccwest-mls1",
+                    "IP": "10.95.92.31"
+                },
+                {
+                    "Node_Name": "mdta-iccwest-wof-mls1",
+                    "IP": "10.95.92.33"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-2340-mls1",
+                    "IP": "10.93.76.66"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-bldg2310-1stflr-swt1",
+                    "IP": "10.95.76.132"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-bldg2310-2ndflr-swt1",
+                    "IP": "10.93.85.2"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-bldg2310-comprm-mls1",
+                    "IP": "10.95.72.14"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-bldg2310-comprm-stk1",
+                    "IP": "10.93.85.3"
+                },
+                {
+                    "Node_Name": "mdta-ptbreeze-bldg2330-mls1",
+                    "IP": "10.95.96.59"
+                }
+            ]
+        },
+        {
+            "region_name": "northern",
+            "nodes": [
+                {
+                    "Node_Name": "mdta-hatemadm-mls1",
+                    "IP": "10.95.90.5"
+                },
+                {
+                    "Node_Name": "mdta-hatemmaint-mls1",
+                    "IP": "10.95.90.10"
+                },
+                {
+                    "Node_Name": "mdta-jfkadm-lan-mls1",
+                    "IP": "10.95.99.15"
+                },
+                {
+                    "Node_Name": "mdta-jfkadm-wswt1",
+                    "IP": "10.93.102.62"
+                },
+                {
+                    "Node_Name": "mdta-jfkmaint1-etl-swt1",
+                    "IP": "10.95.99.186"
+                },
+                {
+                    "Node_Name": "mdta-jfkmaint1-lan-mls1",
+                    "IP": "10.95.88.44"
+                },
+                {
+                    "Node_Name": "mdta-jfkmaint2-lan-mls1",
+                    "IP": "10.95.88.48"
+                },
+                {
+                    "Node_Name": "mdta-jfkmsp-lan-mls1",
+                    "IP": "10.95.88.49"
+                },
+                {
+                    "Node_Name": "mdta-jfk-nbi-swt1",
+                    "IP": "170.93.97.246"
+                },
+                {
+                    "Node_Name": "mdta-jfk-nbs-swt1",
+                    "IP": "170.93.97.245"
+                },
+                {
+                    "Node_Name": "mdta-jfksbi-dc-mls1",
+                    "IP": "10.95.99.26"
+                },
+                {
+                    "Node_Name": "mdta-jfksbi-dc-mls2",
+                    "IP": "10.95.99.27"
+                },
+                {
+                    "Node_Name": "mdta-jfksbi-dc-mls3",
+                    "IP": "10.93.76.64"
+                },
+                {
+                    "Node_Name": "mdta-jfk-sbi-swt1",
+                    "IP": "170.93.97.247"
+                },
+                {
+                    "Node_Name": "mdta-jfk-sbs-swt1",
+                    "IP": "170.93.97.248"
+                },
+                {
+                    "Node_Name": "mdta-lilianholt-trailer-mls1",
+                    "IP": "10.95.96.62"
+                },
+                {
+                    "Node_Name": "mdta-lilianholt-trailer-swt1",
+                    "IP": "10.93.92.66"
+                },
+                {
+                    "Node_Name": "mdta-wm-wmo-mls1",
+                    "IP": "10.93.76.67"
+                },
+                {
+                    "Node_Name": "mdta-wm-wmo-swt1",
+                    "IP": "10.93.74.135"
+                }
+            ]
+        },
+        {
+            "region_name": "southern",
+            "nodes": [
+                {
+                    "Node_Name": "mdta-laneadm-stk1",
+                    "IP": "10.93.87.242"
+                },
+                {
+                    "Node_Name": "mdta-lane-ngmaint1-swt1",
+                    "IP": "10.93.87.253"
+                },
+                {
+                    "Node_Name": "mdta-lanepol-egarage-mls1",
+                    "IP": "10.95.75.2"
+                },
+                {
+                    "Node_Name": "mdta-lanepol-mls1",
+                    "IP": "10.95.75.1"
+                },
+                {
+                    "Node_Name": "mdta-niceadm-mls1",
+                    "IP": "10.95.94.24"
+                },
+                {
+                    "Node_Name": "mdta-niceadm-stk1",
+                    "IP": "10.93.78.131"
+                },
+                {
+                    "Node_Name": "mdta-niceadm-wswt1",
+                    "IP": "10.93.123.222"
+                },
+                {
+                    "Node_Name": "mdta-nicemaint-stk1",
+                    "IP": "170.93.99.187"
+                },
+                {
+                    "Node_Name": "mdta-nicewash-swt1",
+                    "IP": "170.93.99.186"
+                }
+            ]
         }
     ]
 }
