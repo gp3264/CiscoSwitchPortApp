@@ -23,7 +23,18 @@ class DataclassDunderMethods:
             else:
                 result[field.name] = value
         return result
-    
+
+    def update_attributes(self, updates: dict):
+        """
+        Update the attributes of the class based on the provided dictionary.
+
+        :param updates: A dictionary containing attribute names as keys and new values as values.
+        """
+        for key, value in updates.items():
+            if hasattr(self, key):  # Check if the attribute exists
+                setattr(self, key, value)
+            else:
+                print(f"Warning: {key} is not an attribute of Person")    
     
     def __str__(self) -> str:
         """

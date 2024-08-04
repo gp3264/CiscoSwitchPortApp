@@ -5,16 +5,36 @@ from app.mac_address_support import MacAddressSupport
 from app.cli_commands_templates import CLIExecutive
 from app.application_dataclasses import *
 from app.application_dataclasses_support import *
-from app.SupportUtilities import TaskProgress, TaskProgressIndicator
+from app.SupportUtilities import TaskProgressIndicator
 from app.file_support import FileConverter, FileHandler
+from app.application_views import PortSecurityView
 import os
 
 
-class MainDataRetrieval:
+class MainApplication:
+    pass
+
+
+class MainDataImport():
+    def __init__(self, **kwargs):
+        self.cisco_switches:CiscoDataRetrieval = CiscoDataRetrieval(**kwargs)
+        
+        
+class CreateViews:
+    def __init__(self, **kwargs):
+        devices:List[NetworkDeviceEntry] = kwargs.get("", None)
+        
+        if (devices):
+            self.port_security_view: PortSecurityView = PortSecurityView(devices)
+        
+
+class CiscoDataRetrieval:
 
     def __init__(self, **kwargs):
+        
         print("Clean up previous cli_connection.log...")
         file_path = r'..\app\cli_connection.log'
+        
         try:
             os.remove(file_path)
             print(f"File '{file_path}' has been deleted successfully.")
@@ -44,13 +64,15 @@ class MainDataRetrieval:
         for region in self.region_nodes['MDTA_Regions']:
             for node in region['nodes']:
                 
-                info_flags = InfoErrorFlags()
-                error_flags = InfoErrorFlags() 
+                template_active_flags = InfoErrorFlags(name="tempalte_active_flags", 
+                                                       description = "Bit on when template is in use")
+                template_error_flags = InfoErrorFlags(name="tempalte_active_flags", 
+                                                       description = "Bit on when template has error condition") 
                 
                 
                 network_device = NetworkDeviceEntry(
-                    textfsm_templates_active = InfoErrorFlags(),
-                    textfsm_templates_errors = InfoErrorFlags(),
+                    textfsm_templates_active = template_active_flags,
+                    textfsm_templates_errors = template_error_flags,
                     switch_hostname=node["Node_Name"],
                     switch_ip_address=node["IP"],
                     switch_region=region["region_name"],
@@ -221,8 +243,11 @@ class MainDataRetrieval:
         
         
 if __name__ == "__main__":
-    sample = MainDataRetrieval(filename="region_nodes.json", username="gphillips3", password="02121103!Jun24")
+    sample = CiscoDataRetrieval(filename="region_nodes.json", username="gphillips3", password="02121103!Jun24")
     #print(str(sample))
     file = FileHandler.delete_txt(r"..\app\console_data.txt")
     file = FileHandler.write_txt(r"..\app\console_data.txt", str(sample))
+    
+    view = PortSecurityView(sample.Data['network_cisco_switches'])
+    print(str(view))
         

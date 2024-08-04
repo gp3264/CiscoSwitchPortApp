@@ -53,18 +53,19 @@ class MacAddressSupport:
             print(f"File {self.mac_database_file} not found. Downloading from URL...")
             self.download_mac_database()
         else:
-            print(f"File {self.mac_database_file} found. Using local file.")
+            pass
+            #print(f"File {self.mac_database_file} found. Using local file.")
 
         try:
             with open(self.mac_database_file, 'r', encoding='utf-8') as file:
                 data = file.read()
-                print(f"Loaded {len(data)} characters from {self.mac_database_file}")
+                #print(f"Loaded {len(data)} characters from {self.mac_database_file}")
                 if not data.strip():
-                    print("Local file is empty, downloading data from URL...")
+                    #print("Local file is empty, downloading data from URL...")
                     self.download_mac_database()
                     with open(self.mac_database_file, 'r', encoding='utf-8') as file:
                         data = file.read()
-                        print(f"Loaded {len(data)} characters from {self.mac_database_file} after re-downloading")
+                        #print(f"Loaded {len(data)} characters from {self.mac_database_file} after re-downloading")
                 return self.parse_manuf_file(data)
         except Exception as e:
             raise ValueError(f"Failed to load data from {self.mac_database_file}: {e}")
@@ -106,8 +107,9 @@ class MacAddressSupport:
                     mac_to_vendor[mac_prefix] = short_name
                     self.short_name_to_full_name[short_name] = full_name
                 else:
-                    print(f"Skipping invalid line: {line}")
-            print(f"Parsed {len(mac_to_vendor)} entries from the MAC database")
+                    pass
+                    #print(f"Skipping invalid line: {line}")
+            #print(f"Parsed {len(mac_to_vendor)} entries from the MAC database")
             return mac_to_vendor
         except Exception as e:
             raise ValueError(f"Failed to parse manuf file: {e}")
@@ -127,11 +129,14 @@ class MacAddressSupport:
         :param mac_address: The MAC address to lookup.
         :return: The vendor name if found, otherwise None.
         """
-        normalized_mac = self.normalize_mac_address(mac_address)
-        mac_prefixes = [normalized_mac[:i] for i in (6, 7, 9)]  # 24-bit, 28-bit, 36-bit prefixes
-        for prefix in mac_prefixes:
-            if prefix in self.mac_to_vendor:
-                return self.mac_to_vendor[prefix]
+        try:
+            normalized_mac = self.normalize_mac_address(mac_address)
+            mac_prefixes = [normalized_mac[:i] for i in (6, 7, 9)]  # 24-bit, 28-bit, 36-bit prefixes
+            for prefix in mac_prefixes:
+                if prefix in self.mac_to_vendor:
+                    return self.mac_to_vendor[prefix]
+        except ValueError as e:
+            return "Invalid MAC format"
         return None
 
     def get_full_vendor_name(self, short_name: str) -> Optional[str]:
