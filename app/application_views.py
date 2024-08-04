@@ -55,7 +55,7 @@ class PortSecurityView(ViewBase):
         entry.switch_hostname = switch_hostname
         entry.switch_ip_address = switch_ip_address
         entry.switch_region = switch_region
-        entry.converted_last_input = TimeParser(show_interfaces_entry.LAST_INPUT).time_string
+        entry.converted_last_input = TimeParser(show_interfaces_entry.LAST_INPUT).
         entry.converted_last_output = TimeParser(show_interfaces_entry.LAST_OUTPUT).time_string  
         entry.mac_vendor = self.mac_address_support.get_vendor(show_interfaces_entry.MAC_ADDRESS)  
         entry.update_attributes(show_interfaces_entry.to_dict())     
